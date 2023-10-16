@@ -38,9 +38,9 @@ export function TokenSelectField({
 
   useEffect(() => {
     (async () => {
-      if (!field.value) setToken(undefined);
+      if (!field.value) await setToken(undefined);
       else if (field.value !== token?.tokenCaip19Id) {
-        setToken(undefined);
+        await setToken(undefined);
         await helpers.setValue('');
       }
     })();
@@ -50,7 +50,7 @@ export function TokenSelectField({
     // Set the token address value in formik state
     await helpers.setValue(newToken.tokenCaip19Id);
     // reset amount after change token
-    setFieldValue('amount', '');
+    await setFieldValue('amount', '');
     // Update local state
     setToken(newToken);
     // Update nft state in parent
