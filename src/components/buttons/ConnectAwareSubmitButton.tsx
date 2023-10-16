@@ -34,9 +34,9 @@ export function ConnectAwareSubmitButton<FormValues = any>({ chainCaip2Id, text,
   const onClick = isAccountReady ? undefined : connectFn;
 
   // Automatically clear error state after a timeout
-  const clearErrors = useCallback(() => {
+  const clearErrors = useCallback(async () => {
     setErrors({});
-    setTouched({});
+    await setTouched({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setErrors, setTouched, errors, touched]);
 

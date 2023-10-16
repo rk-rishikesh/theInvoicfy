@@ -35,17 +35,20 @@ export function TokenSelectField({
   const [token, setToken] = useState<TokenMetadata | undefined>(undefined);
 
   // Keep local state in sync with formik state
+
   useEffect(() => {
-    if (!field.value) setToken(undefined);
-    else if (field.value !== token?.tokenCaip19Id) {
-      setToken(undefined);
-      helpers.setValue('');
-    }
+    (async () => {
+      if (!field.value) setToken(undefined);
+      else if (field.value !== token?.tokenCaip19Id) {
+        setToken(undefined);
+        await helpers.setValue('');
+      }
+    })();
   }, [token, field.value, helpers]);
 
-  const handleChange = (newToken: TokenMetadata) => {
+  const handleChange = async (newToken: TokenMetadata) => {
     // Set the token address value in formik state
-    helpers.setValue(newToken.tokenCaip19Id);
+    await helpers.setValue(newToken.tokenCaip19Id);
     // reset amount after change token
     setFieldValue('amount', '');
     // Update local state

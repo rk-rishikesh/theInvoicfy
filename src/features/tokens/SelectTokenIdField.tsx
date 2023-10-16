@@ -17,8 +17,8 @@ type Props = {
 export function SelectTokenIdField({ name, tokenCaip19Id, disabled }: Props) {
   const [, , helpers] = useField<number>(name);
   const [tokenId, setTokenId] = useState<string | undefined>(undefined);
-  const handleChange = (newTokenId: string) => {
-    helpers.setValue(parseInt(newTokenId));
+  const handleChange = async (newTokenId: string) => {
+    await helpers.setValue(parseInt(newTokenId));
     setTokenId(newTokenId);
   };
 

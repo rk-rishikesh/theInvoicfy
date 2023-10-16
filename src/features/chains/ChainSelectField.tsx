@@ -21,12 +21,12 @@ export function ChainSelectField({ name, label, chainCaip2Ids, onChange, disable
   const [field, , helpers] = useField<ChainCaip2Id>(name);
   const { setFieldValue } = useFormikContext<TransferFormValues>();
 
-  const handleChange = (newChainId: ChainCaip2Id) => {
-    helpers.setValue(newChainId);
+  const handleChange = async (newChainId: ChainCaip2Id) => {
+    await helpers.setValue(newChainId);
     // Reset other fields on chain change
-    setFieldValue('tokenCaip19Id', '');
-    setFieldValue('recipientAddress', '');
-    setFieldValue('amount', '');
+    await setFieldValue('tokenCaip19Id', '');
+    await setFieldValue('recipientAddress', '');
+    await setFieldValue('amount', '');
     if (onChange) onChange(newChainId);
   };
 
