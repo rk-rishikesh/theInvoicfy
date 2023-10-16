@@ -38,7 +38,7 @@ export function TokenSelectField({
 
   useEffect(() => {
     (async () => {
-      if (!field.value) await setToken(undefined);
+      if (void !field.value) void setToken(undefined);
       else if (field.value !== token?.tokenCaip19Id) {
         await setToken(undefined);
         await helpers.setValue('');
