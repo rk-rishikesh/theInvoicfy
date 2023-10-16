@@ -375,7 +375,7 @@ function ReviewDetails({
   const route = getTokenRoute(originCaip2Id, destinationCaip2Id, token, tokenRoutes);
   const isNft = token && isNonFungibleToken(token);
   const sendValue = isNft ? amount.toString() : toWei(amount, route?.originDecimals).toString();
-  const { isLoading, isApproveRequired } = useIsApproveRequired(route!, token, sendValue, visible);
+  const { isLoading, isApproveRequired } = useIsApproveRequired(token, sendValue, route!, visible);
   const originProtocol = getProtocolType(originCaip2Id);
   const originUnitName = ProtocolSmallestUnit[originProtocol];
 
@@ -446,7 +446,7 @@ function validateFormValues(
 
   if (!isNft) {
     // Validate balances for ERC20-like tokens
-    if (sendValue.gt(balances.senderBalance)) return { amount: 'Insufficient balance' };
+    if (sendValue.gt(balances.senderTokenBalance)) return { amount: 'Insufficient balance' };
   } else {
     // Validate balances for ERC721-like tokens
     const { isSenderNftOwner, senderNftIds } = balances;
