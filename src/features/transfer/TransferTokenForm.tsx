@@ -181,7 +181,7 @@ function AmountSection({
   invoiceDetails: any;
 }) {
   const { values } = useFormikContext<TransferFormValues>();
-  const { balance, decimals } = useOriginBalance(values, tokenRoutes);
+  const { tokenBalance, tokenDecimals } = useOriginBalance(values, tokenRoutes);
 
   return (
     <div className="flex-1">
@@ -189,7 +189,7 @@ function AmountSection({
         <label htmlFor="amount" className="block uppercase text-sm text-gray-500 pl-0.5">
           Amount
         </label>
-        <TokenBalance label="My balance" balance={balance} decimals={decimals} />
+        <TokenBalance label="My balance" balance={tokenBalance} decimals={tokenDecimals} />
       </div>
       {isNft ? (
         <SelectOrInputTokenIds disabled={isReview} tokenRoutes={tokenRoutes} />
