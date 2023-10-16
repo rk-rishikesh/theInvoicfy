@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CryptoJS from 'crypto-js';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
 
 const secretKey = 'secretKey';
@@ -15,7 +15,7 @@ library.add(faTimes);
 library.add(faPlus);
 
 function Invoice() {
-  const [logoImage, setLogoImage] = useState(null);
+  // const [logoImage, setLogoImage] = useState<string | ArrayBuffer | null>(null);
   const [companyName, setCompanyName] = useState('');
   const [clientName, setClientName] = useState('');
   const [clientWalletAddress, setClientWalletAddress] = useState('');
@@ -24,7 +24,7 @@ function Invoice() {
   const [dueDate, setDueDate] = useState('');
   const [products, setProducts] = useState([{ productName: '', quantity: 0, rate: 0, amount: 0 }]);
   const [currency, setCurrency] = useState('');
-  const [showCurrencyOptions, setShowCurrencyOptions] = useState(false);
+  // const [showCurrencyOptions, setShowCurrencyOptions] = useState(false);
   const currencyButtonRef = useRef(null);
 
   const { address } = useAccount();
@@ -110,7 +110,10 @@ function Invoice() {
     // Render the HTML to a canvas with higher DPI for better quality
     const dpi = 600; // Adjust DPI as needed for improved quality
     const scale = dpi / 96; // The default DPI is 96, so calculate the scale factor
-    const canvas = await html2canvas(invoiceHTML, { scale: scale });
+    var canvas;
+    if (invoiceHTML != null) {
+      canvas = await html2canvas(invoiceHTML, { scale: scale });
+    }
 
     // Convert the canvas to an image
     const imgData = canvas.toDataURL('image/jpeg', 1.0);
@@ -167,40 +170,44 @@ function Invoice() {
   };
 
   // Function to handle logo file input
-  const handleLogoInputChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setLogoImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleLogoInputChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       if (e.target != null) {
+  //         setLogoImage(e.target.result);
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
-  const changeCurrency = (newCurrency) => {
-    setCurrency(newCurrency);
-  };
+  // const changeCurrency = (newCurrency) => {
+  //   setCurrency(newCurrency);
+  // };
 
   const currencyOptions = ['USD', 'EUR', 'GBP', 'JPY'];
 
-  const toggleCurrencyOptions = () => {
-    setShowCurrencyOptions(!showCurrencyOptions);
-  };
+  // const toggleCurrencyOptions = () => {
+  //   setShowCurrencyOptions(!showCurrencyOptions);
+  // };
 
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (currencyButtonRef.current && !currencyButtonRef.current.contains(event.target)) {
-        setShowCurrencyOptions(false);
-      }
-    };
+  // useEffect(() => {
+  //   // const handleOutsideClick = (event: any) => {
+  //   //   if (currencyButtonRef.current) {
+  //   //     if (currencyButtonRef.current) {
+  //   //       setShowCurrencyOptions(false);
+  //   //     }
+  //   //   }
+  //   // };
 
-    window.addEventListener('mousedown', handleOutsideClick);
+  //   window.addEventListener('mousedown', handleOutsideClick);
 
-    return () => {
-      window.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('mousedown', handleOutsideClick);
+  //   };
+  // }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#A3CEF1] to-white flex flex-col justify-center items-center p-8 pt-28">
@@ -220,7 +227,7 @@ function Invoice() {
       <div className="bg-white rounded-lg shadow-md py-16 space-y-4" id="report">
         <div className="flex justify-between px-16">
           <div className="flex flex-col space-y-4">
-            <label
+            {/* <label
               htmlFor="logoInput"
               className="border rounded flex items-center justify-center p-2 h-20 w-36 cursor-pointer text-center"
             >
@@ -236,7 +243,7 @@ function Invoice() {
               accept="image/*"
               className="hidden"
               onChange={handleLogoInputChange}
-            />
+            /> */}
             <input
               type="text"
               placeholder="Enter company's name"
