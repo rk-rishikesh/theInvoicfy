@@ -1,6 +1,6 @@
 import { useField, useFormikContext } from 'formik';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { TokenIcon } from '../../components/icons/TokenIcon';
 import ChevronIcon from '../../images/icons/chevron-down.svg';
@@ -36,15 +36,15 @@ export function TokenSelectField({
 
   // Keep local state in sync with formik state
 
-  useEffect(() => {
-    (async () => {
-      if (void !field.value) void setToken(undefined);
-      else if (field.value !== token?.tokenCaip19Id) {
-        await setToken(undefined);
-        await helpers.setValue('');
-      }
-    })();
-  }, [token, field.value, helpers]);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (!field.value) setToken(undefined);
+  //     else if (field.value !== token?.tokenCaip19Id) {
+  //       await setToken(undefined);
+  //       await helpers.setValue('');
+  //     }
+  //   })();
+  // }, [token, field.value, helpers]);
 
   const handleChange = async (newToken: TokenMetadata) => {
     // Set the token address value in formik state
