@@ -8,7 +8,7 @@ import { useTokenRoutes } from '../tokens/routes/hooks';
 
 import { TransferTokenForm } from './TransferTokenForm';
 
-export function TransferTokenCard() {
+export function TransferTokenCard({ invoiceDetails }: any) {
   const { tokenRoutes, isLoading, error: routesError } = useTokenRoutes();
 
   return (
@@ -17,17 +17,12 @@ export function TransferTokenCard() {
         <div className="absolute left-0 right-0 -top-32 xs:-top-24 flex justify-center overflow-hidden z-10">
           <WideChevron direction="s" height="100%" width="100" rounded={true} />
         </div>
-        <div className="relative flex items-start justify-between z-20">
+        {/* <div className="relative flex items-start justify-between z-20">
           <h2 className="pl-0.5 text-lg">Send Tokens</h2>
-          {/* <IconButton
-          imgSrc={GearIcon}
-          width={20}
-          height={20}
-          title="Settings"
-          classes="hover:rotate-90"
-        /> */}
-        </div>
-        {tokenRoutes && <TransferTokenForm tokenRoutes={tokenRoutes} />}
+        </div> */}
+        {tokenRoutes && (
+          <TransferTokenForm tokenRoutes={tokenRoutes} invoiceDetails={invoiceDetails} />
+        )}
         {isLoading && (
           <div className="my-24 flex flex-col items-center">
             <Spinner />

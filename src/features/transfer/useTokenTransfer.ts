@@ -10,13 +10,13 @@ import { ProtocolType, convertDecimals, toWei } from '@hyperlane-xyz/utils';
 import { toastTxSuccess } from '../../components/toast/TxSuccessToast';
 import { logger } from '../../utils/logger';
 import { parseCaip2Id } from '../caip/chains';
-import { isNonFungibleToken } from '../caip/tokens';
+import { isNativeToken, isNonFungibleToken } from '../caip/tokens';
 import { getMultiProvider } from '../multiProvider';
 import { AppState, useStore } from '../store';
 import { AdapterFactory } from '../tokens/AdapterFactory';
 import { isApproveRequired } from '../tokens/approval';
 import { Route, RoutesMap } from '../tokens/routes/types';
-import { getTokenRoute, isRouteFromNative, isRouteToCollateral } from '../tokens/routes/utils';
+import { getTokenRoute, isRouteFromCollateral, isRouteToCollateral } from '../tokens/routes/utils';
 import {
   AccountInfo,
   ActiveChainInfo,
@@ -98,6 +98,7 @@ async function executeTransfer({
   setIsLoading: (b: boolean) => void;
   onDone?: () => void;
 }) {
+  console.log(values);
   logger.debug('Preparing transfer transaction(s)');
   setIsLoading(true);
   let status: TransferStatus = TransferStatus.Preparing;
@@ -112,7 +113,7 @@ async function executeTransfer({
     if (!tokenRoute) throw new Error('No token route found between chains');
 
     const isNft = isNonFungibleToken(tokenCaip19Id);
-    const weiAmountOrId = isNft ? amount : toWei(amount, tokenRoute.originDecimals).toFixed(0);
+    const weiAmountOrId = isNft ? amount : toWei(amount, tokenRoute.originDecimals).toString();
     const activeAccountAddress = activeAccounts.accounts[originProtocol]?.address || '';
 
     addTransfer({
@@ -249,9 +250,10 @@ async function executeEvmTransfer({
   const gasPayment = await hypTokenAdapter.quoteGasPayment(destinationDomainId);
   logger.debug('Quoted gas payment', gasPayment);
   // If sending native tokens (e.g. Eth), the gasPayment must be added to the tx value and sent together
-  const txValue = isRouteFromNative(tokenRoute)
-    ? BigNumber.from(gasPayment).add(weiAmountOrId)
-    : gasPayment;
+  const txValue =
+    isRouteFromCollateral(tokenRoute) && isNativeToken(baseTokenCaip19Id)
+      ? BigNumber.from(gasPayment).add(weiAmountOrId)
+      : gasPayment;
   const transferTxRequest = (await hypTokenAdapter.populateTransferRemoteTx({
     weiAmountOrId,
     recipient: recipientAddress,
